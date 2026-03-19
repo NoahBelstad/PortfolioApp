@@ -2,7 +2,7 @@ package com.portfolio.backend.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class Projetc (
+data class Project(
     val name: String,
     val description: String?,
     @JsonProperty("html_url")
