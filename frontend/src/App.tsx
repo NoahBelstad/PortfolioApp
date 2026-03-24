@@ -15,7 +15,6 @@ export default function App() {
         <Header />
         <AppShell.Main>
           <Hero />
-          {}
           <ProjectCarousel />
         </AppShell.Main>
       </AppShell>
