@@ -41,7 +41,6 @@ class PortfolioService(private val restTemplate: RestTemplate) {
 
     private fun checkImageExists(url: String): Boolean {
         return try {
-            // We use HEAD instead of GET so we don't download the whole image, just check the status
             val response = restTemplate.execute(url, HttpMethod.HEAD, null, { it.statusCode.is2xxSuccessful })
             response ?: false
         } catch (e: Exception) {
