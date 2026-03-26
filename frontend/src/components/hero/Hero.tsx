@@ -15,11 +15,26 @@ export function Hero() {
           </Text>
 
           <Group justify="center" gap="md" mt={20}>
-            <Button size="xl" variant="outline" color="blue" radius="xl">
+            <Button 
+              component="a"
+              href="https://github.com/noahbelstad" 
+              target="_blank"
+              size="xl" 
+              variant="outline" 
+              color="blue" 
+              radius="xl"
+            >
               View my github
             </Button>
             
-            <Button size="xl" variant="outline" color="blue" radius="xl">
+            <Button 
+              component="a"
+              href="/contact"
+              size="xl" 
+              variant="outline" 
+              color="blue" 
+              radius="xl"
+            >
               Contact me
             </Button>
           </Group>
