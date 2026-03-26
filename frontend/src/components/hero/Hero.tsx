@@ -2,7 +2,7 @@ import { Title, Text, Button, Container, Stack, Group } from '@mantine/core';
 
 export function Hero() {
   return (
-    <div style={{ minHeight: '600px', paddingTop: '150px' }}>
+    <div style={{ minHeight: '470px', paddingTop: '60px' }}>
       <Container size="md">
         <Stack align="center" gap="xl">
           
