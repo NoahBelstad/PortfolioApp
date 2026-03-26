@@ -7,7 +7,7 @@ export function Hero() {
         <Stack align="center" gap="xl">
           
           <Title c="white" fz="5rem" fw={900} ta="center">
-            Fullstack Developer
+            Noah Belstad
           </Title>
           
           <Text c="dimmed" size="lg" maw={600} ta="center">
