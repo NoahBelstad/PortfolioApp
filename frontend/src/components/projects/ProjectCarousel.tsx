@@ -63,7 +63,6 @@ export function ProjectCarousel() {
         slideSize={{ base: '100%', sm: '50%', md: '45%' }}
         slideGap="md"
         draggable
-        withControls
         plugins={[autoScroll.current]}
         emblaOptions={{ dragFree: true, align: 'start', loop: true }}
       >
