@@ -19,17 +19,15 @@ const MOCK_DATA: Project[] = [
 ];
 
 export function ProjectCarousel() {
-  // Fix 1: Pass the Project interface to useState
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   const autoScroll = useRef(
-    AutoScroll({ speed: 0.7, stopOnInteraction: false, stopOnMouseEnter: true })
+    AutoScroll({ speed: 0.7, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   useEffect(() => {
-    // Replace 'your-github-username' with your actual username
-    fetch('http://localhost:8080/api/v1/github/your-github-username')
+    fetch('http://localhost:8080/api/v1/github/noahbelstad')
       .then((res) => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
@@ -56,20 +54,19 @@ export function ProjectCarousel() {
       <Carousel
         vars={(theme) => ({
           root: {
-            '--carousel-height': '420px',
+            '--carousel-height': '500px',
             [`@media (min-width: ${theme.breakpoints.sm})`]: { '--carousel-height': '480px' },
             [`@media (min-width: ${theme.breakpoints.md})`]: { '--carousel-height': '550px' },
           },
         })}
         height="var(--carousel-height)"
-        slideSize={{ base: '100%', sm: '50%', md: '33.333333%' }}
+        slideSize={{ base: '100%', sm: '50%', md: '45%' }}
         slideGap="md"
         draggable
         withControls
         plugins={[autoScroll.current]}
         emblaOptions={{ dragFree: true, align: 'start', loop: true }}
       >
-        {/* Fix 2: Remove ': any' as it's now typed via the state */}
         {projects.map((project) => (
           <Carousel.Slide key={project.id}>
             <Card shadow="md" padding="lg" radius="md" withBorder h="100%">
