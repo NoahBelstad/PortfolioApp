@@ -29,7 +29,7 @@ export function ProjectCarousel() {
 
   useEffect(() => {
     // Replace 'your-github-username' with your actual username
-    fetch('http://localhost:8080/api/v1/github/your-github-username')
+    fetch('http://localhost:8080/api/v1/github/noahbelstad')
       .then((res) => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
@@ -56,13 +56,13 @@ export function ProjectCarousel() {
       <Carousel
         vars={(theme) => ({
           root: {
-            '--carousel-height': '420px',
+            '--carousel-height': '500px',
             [`@media (min-width: ${theme.breakpoints.sm})`]: { '--carousel-height': '480px' },
             [`@media (min-width: ${theme.breakpoints.md})`]: { '--carousel-height': '550px' },
           },
         })}
         height="var(--carousel-height)"
-        slideSize={{ base: '100%', sm: '50%', md: '33.333333%' }}
+        slideSize={{ base: '100%', sm: '50%', md: '45%' }}
         slideGap="md"
         draggable
         withControls
