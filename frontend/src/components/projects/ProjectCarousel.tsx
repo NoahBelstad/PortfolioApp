@@ -19,16 +19,14 @@ const MOCK_DATA: Project[] = [
 ];
 
 export function ProjectCarousel() {
-  // Fix 1: Pass the Project interface to useState
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   const autoScroll = useRef(
-    AutoScroll({ speed: 0.7, stopOnInteraction: false, stopOnMouseEnter: true })
+    AutoScroll({ speed: 0.7, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   useEffect(() => {
-    // Replace 'your-github-username' with your actual username
     fetch('http://localhost:8080/api/v1/github/noahbelstad')
       .then((res) => {
         if (!res.ok) throw new Error('Network response was not ok');
@@ -69,7 +67,6 @@ export function ProjectCarousel() {
         plugins={[autoScroll.current]}
         emblaOptions={{ dragFree: true, align: 'start', loop: true }}
       >
-        {/* Fix 2: Remove ': any' as it's now typed via the state */}
         {projects.map((project) => (
           <Carousel.Slide key={project.id}>
             <Card shadow="md" padding="lg" radius="md" withBorder h="100%">
