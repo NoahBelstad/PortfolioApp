@@ -6,11 +6,11 @@ export function Hero() {
       <Container size="md">
         <Stack align="center" gap="xl">
           
-          <Title c="white" fz="5rem" fw={900} ta="center">
+          <Title c="text.2" fz="5rem" fw={900} ta="center">
             Noah Belstad
           </Title>
           
-          <Text c="dimmed" size="lg" maw={600} ta="center">
+          <Text c="text.5" size="lg" maw={600} ta="center">
             Building robust backends with Kotlin & Spring Boot, and responsive frontends with React & Mantine.
           </Text>
 
@@ -21,7 +21,7 @@ export function Hero() {
               target="_blank"
               size="xl" 
               variant="outline" 
-              color="blue" 
+              color="primary" 
               radius="xl"
             >
               View my github
@@ -32,7 +32,7 @@ export function Hero() {
               href="/contact"
               size="xl" 
               variant="outline" 
-              color="blue" 
+              color="primary" 
               radius="xl"
             >
               Contact me
