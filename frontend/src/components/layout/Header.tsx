@@ -7,18 +7,18 @@ export function Header() {
   return (
     <Container size="xl" h="100%">
       <Group justify="space-between" h="100%">
-        <Button component="a" href="/" size="xl" fw={800} variant="transparent" color="blue">
+        <Button component="a" href="/" size="xl" fz={'1.7rem'} fw={800} variant="transparent" color="primary">
           PORTFOLIO
         </Button>
 
         <Group gap="sm" visibleFrom="sm">
-          <Button component="a" href="/about" size="sm" fw={500} variant="outline" color="blue" radius="xl">
+          <Button component="a" href="/about" size="sm" fw={500} variant="outline" color="primary" radius="xl">
             About
           </Button>
-          <Button component="a" href="/contact" size="sm" fw={500} variant="outline" color="blue" radius="xl">
+          <Button component="a" href="/contact" size="sm" fw={500} variant="outline" color="primary" radius="xl">
             Contact
           </Button>
-          <Button component="a" href="/projects" size="sm" fw={500} variant="filled" color="blue" radius="xl">
+          <Button component="a" href="/projects" size="sm" fw={500} variant="filled" color="primary" radius="xl">
             Projects
           </Button>
         </Group>

@@ -44,7 +44,7 @@ export function ProjectCarousel() {
   }, []);
 
   if (loading) {
-    return <Center h={400}><Loader color="blue" /></Center>;
+    return <Center h={400}><Loader color="primary" /></Center>;
   }
 
   return (
@@ -79,14 +79,14 @@ export function ProjectCarousel() {
 
               <Group justify="space-between" mt="md" mb="xs">
                 <Text fw={700} c="white" fz="lg">{project.title}</Text>
-                <Badge color="blue" variant="light">{project.tag}</Badge>
+                <Badge color="primary" variant="light">{project.tag}</Badge>
               </Group>
 
               <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
                 {project.description}
               </Text>
 
-              <Button color="blue" fullWidth radius="md" mt="auto">
+              <Button color="primary" fullWidth radius="md" mt="auto">
                 View Project
               </Button>
             </Card>
