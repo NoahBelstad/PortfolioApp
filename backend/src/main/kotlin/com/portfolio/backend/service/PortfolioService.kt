@@ -1,6 +1,6 @@
 package com.portfolio.backend.service
 
-import com.portfolio.backend.models.Projetc
+import com.portfolio.backend.models.Project
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -13,7 +13,7 @@ class PortfolioService(private val restTemplate: RestTemplate) {
     @org.springframework.beans.factory.annotation.Value("\${github.token}")
     private lateinit var githubToken: String
 
-    fun getGithubRepos(username: String): List<Projetc> {
+    fun getGithubRepos(username: String): List<Project> {
         val url = "https://api.github.com/users/$username/repos"
 
         val headers = HttpHeaders().apply {
@@ -25,7 +25,7 @@ class PortfolioService(private val restTemplate: RestTemplate) {
 
         val entity = HttpEntity<Unit>(headers)
 
-        val response = restTemplate.exchange(url, HttpMethod.GET, entity, Array<Projetc>::class.java)
+        val response = restTemplate.exchange(url, HttpMethod.GET, entity, Array<Project>::class.java)
         val projects = response.body?.toList() ?: emptyList()
 
         projects.forEach { project ->
@@ -48,7 +48,7 @@ class PortfolioService(private val restTemplate: RestTemplate) {
         }
     }
 
-    private fun fetchLanguages(username: String, project: Projetc, entity: HttpEntity<Unit>) {
+    private fun fetchLanguages(username: String, project: Project, entity: HttpEntity<Unit>) {
         try {
             val langUrl = "https://api.github.com/repos/$username/${project.name}/languages"
             val langResponse = restTemplate.exchange(langUrl, HttpMethod.GET, entity, Map::class.java)
