@@ -5,18 +5,13 @@ import AutoScroll from 'embla-carousel-auto-scroll';
 import '@mantine/carousel/styles.css';
 
 interface Project {
-  id: number;
-  title: string;
+  name: string;
   description: string;
-  tag: string;
+  url?: string;
+  language?: string;
+  previewUrl?: string | null;
+  languageBreakdown?: Record<string, number>;
 }
-
-const MOCK_DATA: Project[] = [
-  { id: 1, title: "Project Alpha", description: "Spring Boot & React.", tag: "Kotlin" },
-  { id: 2, title: "Project Beta", description: "Python WebSockets.", tag: "Python" },
-  { id: 3, title: "Project Gamma", description: "Lua Game Scripts.", tag: "Lua" },
-  { id: 4, title: "Project Delta", description: "Mantine Portfolio.", tag: "React" },
-];
 
 export function ProjectCarousel() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -27,72 +22,64 @@ export function ProjectCarousel() {
   );
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/v1/github/noahbelstad')
-      .then((res) => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      })
-      .then((data) => {
-        setProjects(data.length > 0 ? data : MOCK_DATA);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.warn("Backend unreachable, using mock data:", err);
-        setProjects(MOCK_DATA);
-        setLoading(false);
-      });
-  }, []);
+      fetch('http://localhost:8080/api/v1/github/noahbelstad')
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Data from backend:", data);
+          setProjects(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Fetch error:", err);
+          setLoading(false);
+        });
+    }, []);
 
-  if (loading) {
-    return <Center h={400}><Loader color="primary" /></Center>;
+    if (loading) return <Center h={400}><Loader color="blue" /></Center>;
+
+    return (
+      <Container size="xl" py={50}>
+        <Title order={2} mb="xl" c="white">Featured Projects</Title>
+        <Carousel>
+          {projects.map((project) => (
+            <Carousel.Slide key={project.name}>
+              <Card shadow="md" padding="lg" radius="md" withBorder h="100%">
+                <Card.Section>
+                  <Image
+                    src={project.previewUrl || "https://placehold.co/600x400?text=No+Preview"}
+                    height={220}
+                    alt={project.name}
+                    fit="cover"
+                    fallbackSrc="https://placehold.co/600x400?text=Error+Loading+Image"
+                  />
+                </Card.Section>
+
+                <Group justify="space-between" mt="md" mb="xs">
+                  <Text fw={700} c="white" fz="lg">{project.name}</Text>
+                  <Badge color="blue" variant="light">
+                    {project.language || "Code"}
+                  </Badge>
+                </Group>
+
+                <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
+                  {project.description || "No description provided for this repository."}
+                </Text>
+
+                <Button
+                  component="a"
+                  href={project.url}
+                  target="_blank"
+                  color="blue"
+                  fullWidth
+                  radius="md"
+                  mt="auto"
+                >
+                  View on GitHub
+                </Button>
+              </Card>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+      </Container>
+    );
   }
-
-  return (
-    <Container size="xl" py={50}>
-      <Title order={2} mb="xl" c="white" fz="2rem">Featured Projects</Title>
-
-      <Carousel
-        vars={(theme) => ({
-          root: {
-            '--carousel-height': '500px',
-            [`@media (min-width: ${theme.breakpoints.sm})`]: { '--carousel-height': '480px' },
-            [`@media (min-width: ${theme.breakpoints.md})`]: { '--carousel-height': '550px' },
-          },
-        })}
-        height="var(--carousel-height)"
-        slideSize={{ base: '100%', sm: '50%', md: '45%' }}
-        slideGap="md"
-        draggable
-        plugins={[autoScroll.current]}
-        emblaOptions={{ dragFree: true, align: 'start', loop: true }}
-      >
-        {projects.map((project) => (
-          <Carousel.Slide key={project.id}>
-            <Card shadow="md" padding="lg" radius="md" withBorder h="100%">
-              <Card.Section>
-                <Image
-                  src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
-                  h={{ base: 160, sm: 200, md: 250 }}
-                  alt={project.title}
-                />
-              </Card.Section>
-
-              <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={700} c="white" fz="lg">{project.title}</Text>
-                <Badge color="primary" variant="light">{project.tag}</Badge>
-              </Group>
-
-              <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
-                {project.description}
-              </Text>
-
-              <Button color="primary" fullWidth radius="md" mt="auto">
-                View Project
-              </Button>
-            </Card>
-          </Carousel.Slide>
-        ))}
-      </Carousel>
-    </Container>
-  );
-}
