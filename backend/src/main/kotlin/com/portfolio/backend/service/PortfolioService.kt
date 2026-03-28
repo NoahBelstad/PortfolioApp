@@ -14,7 +14,17 @@ class PortfolioService(private val restTemplate: RestTemplate) {
     private lateinit var githubToken: String
 
     fun getGithubRepos(username: String): List<Project> {
-        val url = "https://api.github.com/users/$username/repos"
+        // Manuall examples for testing
+        val exampleProjects = listOf(
+            Project(
+                name = "Example: Cloud Dashboard",
+                description = "A demo project showing how I handle high-traffic infrastructure.",
+                url = "https://github.com/noahbelstad",
+                language = "Kotlin",
+                previewUrl = "https://placehold.co/600x400?text=Cloud+Dashboard",
+                languageBreakdown = mapOf("Kotlin" to 80.0, "Java" to 20.0)
+            )
+        )
 
         val headers = HttpHeaders().apply {
             set("Accept", "application/vnd.github+json")
@@ -22,27 +32,40 @@ class PortfolioService(private val restTemplate: RestTemplate) {
             set("X-GitHub-Api-Version", "2022-11-28")
             set("User-Agent", "Spring-Boot-Portfolio")
         }
-
         val entity = HttpEntity<Unit>(headers)
 
-        val response = restTemplate.exchange(url, HttpMethod.GET, entity, Array<Project>::class.java)
-        val projects = response.body?.toList() ?: emptyList()
+        return try {
+            val url = "https://api.github.com/users/$username/repos"
+            val response = restTemplate.exchange(url, HttpMethod.GET, entity, Array<Project>::class.java)
+            val fetchedProjects = response.body?.toList() ?: emptyList()
 
-        projects.forEach { project ->
-            val potentialImageUrl = "https://raw.githubusercontent.com/$username/${project.name}/main/preview.png"
+            fetchedProjects.forEach { project ->
+                val repoName = project.name
 
-            project.previewUrl = if (checkImageExists(potentialImageUrl)) potentialImageUrl else null
+                val mainUrl = "https://raw.githubusercontent.com/$username/$repoName/main/preview.png"
+                val masterUrl = "https://raw.githubusercontent.com/$username/$repoName/master/preview.png"
 
-            fetchLanguages(username, project, entity)
+                project.previewUrl = when {
+                    checkImageExists(mainUrl, entity) -> mainUrl
+                    checkImageExists(masterUrl, entity) -> masterUrl
+                    else -> null
+                }
+
+                fetchLanguages(username, project, entity)
+            }
+
+            exampleProjects + fetchedProjects
+
+        } catch (e: Exception) {
+            println("GitHub API error: ${e.message}")
+            exampleProjects
         }
-
-        return projects
     }
 
-    private fun checkImageExists(url: String): Boolean {
+    private fun checkImageExists(url: String, entity: HttpEntity<Unit>): Boolean {
         return try {
-            val response = restTemplate.execute(url, HttpMethod.HEAD, null, { it.statusCode.is2xxSuccessful })
-            response ?: false
+            val response = restTemplate.exchange(url, HttpMethod.GET, entity, ByteArray::class.java)
+            response.statusCode.is2xxSuccessful
         } catch (e: Exception) {
             false
         }
@@ -57,7 +80,7 @@ class PortfolioService(private val restTemplate: RestTemplate) {
             if (langMap != null && langMap.isNotEmpty()) {
                 val totalBytes = langMap.values.sum().toDouble()
                 project.languageBreakdown = langMap.mapValues { (_, bytes) ->
-                    (bytes / totalBytes * 100).let { Math.round(it * 10.0) / 10.0 }
+                    Math.round((bytes / totalBytes * 100) * 10.0) / 10.0
                 }
             }
         } catch (e: Exception) {
